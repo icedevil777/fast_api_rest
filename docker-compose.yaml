@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "5439:5432"
+    networks:
+      - web_2_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U restaurant -d restaurant"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sh -c "uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+#     command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    volumes:
+      - .:/app
+    networks:
+    - web_2_network
+    ports:
+      - "8000:8000"
+    depends_on:
+    - db
+    restart: always
+    environment:
+      - DADABSE_URL=${EE_DATABASE_URL}
+
+networks:
+  web_2_network:
+    name: web_2_network
+    driver: bridge

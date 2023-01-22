@@ -38,3 +38,4 @@ uvloop==0.17.0
 watchfiles==0.18.1
 weblib==0.1.30
 websockets==10.4
+pytest==7.2.1
