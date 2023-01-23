@@ -1,13 +1,14 @@
-import configparser
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import *
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import sessionmaker
 from settings import settings
 
-engine = create_engine(settings.database_url)
+# engine = create_engine(settings.database_url)
+engine = create_async_engine(settings.database_url)
 
-SessionLocal = sessionmaker(autoflush=False, bind=engine)
+SessionLocal = sessionmaker(bind=engine, autoflush=False, class_=AsyncSession)
 
 Base = declarative_base()
 
@@ -70,4 +71,5 @@ class Dish(Base):
         )
 
 
-Base.metadata.create_all(bind=engine)
+# Base.metadata.create_all(bind=engine)
+
