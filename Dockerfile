@@ -1,53 +1,8 @@
-# 
 FROM python:3.10-slim
-
-ENV PYTHONUNBUFFERED 1
-# 
 WORKDIR /app
-
-# 
-COPY requirements.txt requirements.txt
-RUN pip install --upgrade setuptools 
-
-# 
-RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
-
-
-COPY . ./app
-
-EXPOSE 8000
-
-# 
-# CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-# FROM python:3.10-slim
-
-# WORKDIR /app
-
-# ENV PYTHONDONTWRITEBYTECODE 1
-
-# ENV PYTHONUNBUFFERED 1
-
-# COPY requirements.txt .
-
-# RUN apt-get update \
-#     && apt-get -y install libpq-dev gcc \
-#     && pip install psycopg2
-
-# RUN pip install -r requirements.txt
-
-# COPY . .
-
-# CMD ["uvicorn", "main:app", "--host", "0.0.0.0"]
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+COPY ./requirements.txt .
+RUN pip3 install --upgrade pip && pip3 install -r requirements.txt --no-cache-dir
+COPY . /app
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

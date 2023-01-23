@@ -4,20 +4,26 @@ from fastapi import FastAPI, Body
 from starlette.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from settings import settings
+from fastapi.testclient import TestClient
+
 
 app = FastAPI(title='Ylab Restaurant')
-
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
     allow_credentials=True,
-    allow_methods=['*'],
     allow_headers=['*'],
+    allow_methods=['*'],
 )
 
 
 session = db.SessionLocal()
+
+
+@app.get("/")
+async def read_main():
+    return {"msg": "Hello World"}
 
 
 @app.get("/api/v1/menus")
