@@ -3,28 +3,44 @@ from pydantic import BaseModel
 
 
 class BaseMenu(BaseModel):
-    id: Optional[int]
+    id: int
     title: Optional[str]
     description: Optional[str]
-    dishes_count: Optional[int]
-    submenus_count: Optional[int]
+    # dishes_count: Optional[int]
+    # submenus_count: Optional[int]
+
+    class Config:
+        orm_mode = True
+
+
+class CreateMenu(BaseModel):
+    title: str
+    description: str
+
+    class Config:
+        orm_mode = True
+
+
+class BaseDelete(BaseModel):
+    status: bool = True
+    massage: str = "It's deleted"
 
     class Config:
         orm_mode = True
 
 
 class BaseSubmenu(BaseModel):
-    id: Optional[int]
+    id: int
     title: Optional[str]
     description: Optional[str]
-    dishes_count: Optional[int]
+    # dishes_count: Optional[int]
 
     class Config:
         orm_mode = True
 
 
 class BaseDish(BaseModel):
-    id: Optional[int]
+    id: int
     title: Optional[str]
     price: Optional[str]
     description: Optional[str]
@@ -33,13 +49,11 @@ class BaseDish(BaseModel):
         orm_mode = True
 
 
-#Удалить ?
 class PatchMenu(BaseMenu):
-    id: Optional[int]
-    title: str
-    description: str
-    dishes_count: Optional[int]
-
+    id: int
+    title: Optional[str]
+    description: Optional[str]
+    # dishes_count: Optional[int]
 
 
 class PatchSubmenu(BaseSubmenu):
@@ -47,7 +61,6 @@ class PatchSubmenu(BaseSubmenu):
     description: Optional[str]
 
 
-#Удалить ?
 class UpgradeDish(BaseDish):
     title: str
     description: str
