@@ -8,8 +8,8 @@ from settings import settings
 # engine = create_engine(settings.database_url)
 engine = create_async_engine(settings.database_url)
 
-SessionLocal = sessionmaker(bind=engine, autoflush=False, class_=AsyncSession)
-
+# SessionLocal = sessionmaker(bind=engine, autoflush=False, class_=AsyncSession)
+SessionLocal = sessionmaker(bind=engine, autoflush=False)
 Base = declarative_base()
 
 
