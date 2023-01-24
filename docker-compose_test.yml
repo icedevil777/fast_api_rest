@@ -19,7 +19,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: sh -c "pytest test_main.py"
+    command: sh -c "alembic upgrade head && pytest test_main.py"
     restart: always
     env_file:
       - .env_test
