@@ -9,3 +9,4 @@
 7. Запускать тесты docker-compose -f "docker-compose_test.yml" up --build
 8. Можно добавить Флаг -d для фонового режима
 
+Если пропала db alembic revision --autogenerate -m 'initial' в докере.
