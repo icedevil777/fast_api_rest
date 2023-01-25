@@ -7,7 +7,7 @@
 5. На основе файла env_example сделать файлы .env и .env_test
 6. Запускать приложение командой: docker-compose up --build 
 7. Запускать тесты: docker-compose -f "docker-compose_test.yml" up --build
-8. Перед запуском контейнеров выбирать нужное sqlalchemy.url в alembic.ini (временное решение)
+8. Перед запуском контейнеров выбирать нужное(тест или прод) sqlalchemy.url в alembic.ini (временное решение)
 9. Что бы очистить базу данных после тестов: docker-compose -f "docker-compose_test.yml" down
 
 
