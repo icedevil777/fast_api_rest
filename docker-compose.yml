@@ -9,8 +9,10 @@ services:
       - /var/lib/postgresql/data/
     env_file:
       - .env
+    ports:
+      - "5435:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U restaurant2 -d restaurant2"]
+      test: ["CMD-SHELL", "pg_isready -U restaurant -d restaurant"]
       interval: 10s
       timeout: 5s
       retries: 5

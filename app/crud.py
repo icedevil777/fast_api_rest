@@ -1,6 +1,7 @@
 import os
 from fastapi import FastAPI, status, HTTPException
-from app.schemas import BaseMenu, BaseSubmenu, PatchMenu, BaseDish, PatchSubmenu, CreateMenu, BaseDelete
+from app.schemas import BaseMenu, BaseSubmenu, PatchMenu, BaseDish, PatchSubmenu, BaseDelete, UpdateCreate, \
+    CreateUpdateDish
 from dotenv import load_dotenv
 from sqlalchemy.orm import Session
 from app.models import Menu, Submenu, Dish
@@ -20,7 +21,7 @@ def get_menu(menu_id: int, db: Session):
     return menu
 
 
-def create_menu(menu: CreateMenu, db: Session):
+def create_menu(menu: UpdateCreate, db: Session):
     """Create new menu"""
     new_menu = Menu(
         title=menu.title,
@@ -32,7 +33,7 @@ def create_menu(menu: CreateMenu, db: Session):
     return new_menu
 
 
-def update_menu(menu_id: int, menu: CreateMenu, db: Session):
+def update_menu(menu_id: int, menu: UpdateCreate, db: Session):
     """Update one menu"""
     menu_to_update = get_menu(menu_id, db)
     if menu_to_update is None:
@@ -61,7 +62,10 @@ def get_submenus(menu_id: int, db: Session):
     """Get all submenus"""
     submenus = db.query(Submenu).filter(
         Submenu.menu_id == menu_id).all()
-    return submenus if submenus else []
+    if submenus:
+        return submenus
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail=["List is empty"])
 
 
 def get_submenu(menu_id: int, submenu_id: int, db: Session):
@@ -76,10 +80,9 @@ def get_submenu(menu_id: int, submenu_id: int, db: Session):
         return one_submenu
 
 
-def create_submenu(menu_id: int, sub: BaseSubmenu, db: Session):
+def create_submenu(menu_id: int, sub: UpdateCreate, db: Session):
     """Create new submenu"""
     new_submenu = Submenu(
-        id=(sub.id or 0),
         title=sub.title,
         description=sub.description,
         menu_id=menu_id
@@ -89,13 +92,12 @@ def create_submenu(menu_id: int, sub: BaseSubmenu, db: Session):
     res = db.query(Submenu).filter(Submenu.menu_id == menu_id).all()
     if res is not None:
         d = db.query(Menu).filter(Menu.id == menu_id).first()
-        # d.submenus_count = len(res)
         db.add(d)
         db.commit()
     return new_submenu
 
 
-def update_submenu(menu_id: int, submenu_id: int, submenu: PatchSubmenu, db: Session):
+def update_submenu(menu_id: int, submenu_id: int, submenu: UpdateCreate, db: Session):
     """Update one submenu"""
     submenu_to_update = db.query(Submenu).filter(
         Submenu.menu_id == menu_id).filter(
@@ -112,24 +114,16 @@ def update_submenu(menu_id: int, submenu_id: int, submenu: PatchSubmenu, db: Ses
 
 def delete_submenu(menu_id: int, submenu_id: int, db: Session):
     """Delete one submenu"""
-    submenu = db.query(Submenu).filter(Submenu.id == submenu_id).first()
+    submenu = get_submenu(menu_id, submenu_id, db)
     if submenu is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     else:
-        res = db.query(Submenu).filter(Submenu.menu_id == menu_id).all()
-        d = db.query(Menu).filter(Menu.id == menu_id).first()
-        # d.submenus_count = len(res) - 1
+        # res = db.query(Submenu).filter(Submenu.menu_id == menu_id).all()
+        # d = db.query(Menu).filter(Menu.id == menu_id).first()
         db.delete(submenu)
         db.commit()
-        db.refresh(d)
-        # count_dish_for_this_menu = db.query(Dish).filter(Dish.menu_id == menu_id).all()
-        # d.dishes_count = len(count_dish_for_this_menu)
         db.commit()
-        db.refresh(d)
-        return {
-            "status": True,
-            "message": "Submenu's been deleted"
-        }
+        return BaseDelete
 
 
 def get_dishes(menu_id: int, submenu_id: int, db: Session):
@@ -152,10 +146,9 @@ def get_dish(menu_id: int, submenu_id: int, dish_id: int, db: Session):
         return dish
 
 
-def create_dish(menu_id: int, submenu_id: int, dish: BaseDish, db: Session):
+def create_dish(menu_id: int, submenu_id: int, dish: CreateUpdateDish, db: Session):
     """Create new dish"""
     new_dish = Dish(
-        id=(dish.id or 0),
         title=dish.title,
         description=dish.description,
         price=float(dish.price),
@@ -190,7 +183,7 @@ def create_dish(menu_id: int, submenu_id: int, dish: BaseDish, db: Session):
         return new_dish
 
 
-def update_dish(menu_id: int, submenu_id: int, dish_id: int, dish: BaseDish, db: Session):
+def update_dish(menu_id: int, submenu_id: int, dish_id: int, dish: CreateUpdateDish, db: Session):
     """Update one dish"""
     dish_for_update = db.query(Dish).filter(Dish.id == dish_id).filter(
         Dish.menu_id == menu_id).filter(Dish.submenu_id == submenu_id).first()
@@ -220,7 +213,4 @@ def delete_dish(menu_id: int, submenu_id: int, dish_id: int, db: Session):
         submenu_dish.dishes_count = len(count_dish) - 1
         db.delete(dish_for_delete)
         db.commit()
-        return {
-            "status": True,
-            "message": "The dish has been deleted"
-        }
+        return BaseDelete

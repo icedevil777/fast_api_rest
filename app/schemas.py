@@ -6,14 +6,12 @@ class BaseMenu(BaseModel):
     id: int
     title: Optional[str]
     description: Optional[str]
-    # dishes_count: Optional[int]
-    # submenus_count: Optional[int]
 
     class Config:
         orm_mode = True
 
 
-class CreateMenu(BaseModel):
+class UpdateCreate(BaseModel):
     title: str
     description: str
 
@@ -31,9 +29,9 @@ class BaseDelete(BaseModel):
 
 class BaseSubmenu(BaseModel):
     id: int
+    menu_id: int
     title: Optional[str]
     description: Optional[str]
-    # dishes_count: Optional[int]
 
     class Config:
         orm_mode = True
@@ -41,8 +39,19 @@ class BaseSubmenu(BaseModel):
 
 class BaseDish(BaseModel):
     id: int
+    menu_id: int
+    submenu_id: int
     title: Optional[str]
-    price: Optional[str]
+    price: float
+    description: Optional[str]
+
+    class Config:
+        orm_mode = True
+
+
+class CreateUpdateDish(BaseModel):
+    title: Optional[str]
+    price: float
     description: Optional[str]
 
     class Config:
