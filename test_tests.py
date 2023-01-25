@@ -205,7 +205,7 @@ def test_delete_dish_empty(client):
 
 def test_delete_menu_1(client):
     response = client.delete('/api/v1/menus/2')
-    assert response.status_code == 404
+    assert response.status_code == 200
     assert response.json() == {
         "status": True,
         "message": "It's deleted"
