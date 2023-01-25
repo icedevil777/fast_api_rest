@@ -36,15 +36,14 @@ async def read_main():
 
 
 @app.get("/api/v1/menus",
-         response_model=list[BaseMenu])
+         response_model=list[BaseMenu], status_code=200)
 def get_menus(db: Session = Depends(get_db)):
     """Get all menus"""
-    menus = db.query(Menu).all()
-    return menus if menus else []
+    return crud.get_menus(db)
 
 
 @app.get("/api/v1/menus/{menu_id}",
-         response_model=BaseMenu)
+         response_model=BaseMenu, status_code=200)
 def get_menu(menu_id: int,
              db: Session = Depends(get_db)
              ) -> BaseMenu:
@@ -53,7 +52,8 @@ def get_menu(menu_id: int,
 
 
 @app.post("/api/v1/menus",
-          response_model=UpdateCreate)
+          response_model=BaseMenu,
+          status_code=201)
 def create_menu(menu: UpdateCreate,
                 db: Session = Depends(get_db)
                 ) -> BaseMenu:
@@ -62,7 +62,7 @@ def create_menu(menu: UpdateCreate,
 
 
 @app.patch("/api/v1/menus/{id}",
-           response_model=UpdateCreate)
+           response_model=BaseMenu)
 def update_menu(menu_id: int,
                 menu: UpdateCreate,
                 db: Session = Depends(get_db)
@@ -72,7 +72,7 @@ def update_menu(menu_id: int,
 
 
 @app.delete("/api/v1/menus/{id}",
-            response_model=BaseDelete)
+            response_model=BaseDelete, status_code=200)
 def delete_menu(id: int,
                 db: Session = Depends(get_db)
                 ) -> BaseDelete:
@@ -88,7 +88,8 @@ def get_submenus(menu_id: int,
     return crud.get_submenus(menu_id, db)
 
 
-@app.post("/api/v1/menus/{menu_id}/submenus", response_model=BaseSubmenu)
+@app.post("/api/v1/menus/{menu_id}/submenus",
+          response_model=BaseSubmenu, status_code=201)
 def create_submenu(menu_id: int,
                    sub: UpdateCreate,
                    db: Session = Depends(get_db)
@@ -117,7 +118,8 @@ def update_submenu(menu_id: int,
     return crud.update_submenu(menu_id, submenu_id, sub, db)
 
 
-@app.delete("/api/v1/menus/{menu_id}/submenus/{submenu_id}")
+@app.delete("/api/v1/menus/{menu_id}/submenus/{submenu_id}",
+            status_code=200)
 def delete_submenu(menu_id: int,
                    submenu_id: int,
                    db: Session = Depends(get_db)
@@ -135,7 +137,8 @@ def get_dishes(menu_id: int,
     return crud.get_dishes(menu_id, submenu_id, db)
 
 
-@app.post("/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes", response_model=BaseDish)
+@app.post("/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes",
+          response_model=BaseDish, status_code=201)
 def create_dish(menu_id: int,
                 submenu_id: int,
                 dish: CreateUpdateDish,
@@ -169,7 +172,7 @@ def update_dish(menu_id: int,
 
 
 @app.delete("/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}",
-            response_model=BaseDelete)
+            response_model=BaseDelete, status_code=200)
 def delete_dish(menu_id: int,
                 submenu_id: int,
                 dish_id: int,

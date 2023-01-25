@@ -1,4 +1,4 @@
-ALLOWED_ORIGINS=["http://localhost","http://localhost:5174"]
+ALLOWED_ORIGINS=["http://localhost"]
 DATABASE_URL="postgresql+psycopg2://restaurant:restaurant@db:5432/restaurant"
 DB_NAME=restaurant
 POSTGRES_USER=restaurant

@@ -16,9 +16,9 @@ def get_menus(db: Session):
 def get_menu(menu_id: int, db: Session):
     """Get one menu"""
     menu = db.query(Menu).get(menu_id)
-    if menu is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    return menu
+    if menu:
+        return menu
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
 
 def create_menu(menu: UpdateCreate, db: Session):
