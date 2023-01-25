@@ -61,8 +61,8 @@ def create_menu(menu: UpdateCreate,
     return crud.create_menu(menu, db)
 
 
-@app.patch("/api/v1/menus/{id}",
-           response_model=BaseMenu)
+@app.patch("/api/v1/menus/{menu_id}",
+           response_model=BaseMenu, status_code=200)
 def update_menu(menu_id: int,
                 menu: UpdateCreate,
                 db: Session = Depends(get_db)
@@ -71,13 +71,13 @@ def update_menu(menu_id: int,
     return crud.update_menu(menu_id, menu, db)
 
 
-@app.delete("/api/v1/menus/{id}",
+@app.delete("/api/v1/menus/{menu_id}",
             response_model=BaseDelete, status_code=200)
-def delete_menu(id: int,
+def delete_menu(menu_id: int,
                 db: Session = Depends(get_db)
                 ) -> BaseDelete:
     """Delete_menu some menu by id"""
-    return crud.delete_menu(id, db)
+    return crud.delete_menu(menu_id, db)
 
 
 @app.get("/api/v1/menus/{menu_id}/submenus")
@@ -108,7 +108,8 @@ def get_submenu(menu_id: int,
     return crud.get_submenu(menu_id, submenu_id, db)
 
 
-@app.patch("/api/v1/menus/{menu_id}/submenus/{submenu_id}", response_model=BaseSubmenu)
+@app.patch("/api/v1/menus/{menu_id}/submenus/{submenu_id}",
+           response_model=BaseSubmenu, status_code=200)
 def update_submenu(menu_id: int,
                    submenu_id: int,
                    sub: UpdateCreate,
@@ -118,8 +119,7 @@ def update_submenu(menu_id: int,
     return crud.update_submenu(menu_id, submenu_id, sub, db)
 
 
-@app.delete("/api/v1/menus/{menu_id}/submenus/{submenu_id}",
-            status_code=200)
+@app.delete("/api/v1/menus/{menu_id}/submenus/{submenu_id}", status_code=200)
 def delete_submenu(menu_id: int,
                    submenu_id: int,
                    db: Session = Depends(get_db)

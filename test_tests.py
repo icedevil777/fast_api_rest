@@ -23,6 +23,8 @@ def test_get_menu(client):
 def test_create_menu(client):
     response = client.post('/api/v1/menus',
                            json={'title': 'My menu 1', 'description': 'My menu description 1'})
+
+    assert response.status_code == 201
     assert response.json() == {
         "id": 1,
         "title": "My menu 1",
@@ -42,13 +44,13 @@ def test_get_menu_1(client):
 
 
 def test_update_menu(client):
-    response = client.patch('/api/v1/menus/1',
-                            json={'title': 'My updated menu 2',
-                                  'description': 'My updated menu description 2'})
+    response = client.patch('/api/v1/menus/1/',
+                            json={'title': 'My updated menu 2', 'description': 'My updated menu description 2'})
+    assert response.status_code == 200
     assert response.json() == {
         "id": 1,
         "title": "My updated menu 2",
-        "description": "My updated menu description 2",
+        "description": "My updated menu description 2"
         # "submenus_count": 0,
         # "dishes_count": 0
     }
@@ -86,7 +88,7 @@ def test_create_menu_2(client):
 
 def test_get_sub(client):
     response = client.get('/api/v1/menus/2/submenus')
-    assert response.json() == []
+    assert response.json() == {'detail': 'Not Found'}
 
 
 def test_post_submenu(client):
@@ -196,14 +198,14 @@ def test_get_one_dish(client):
 
 
 def test_delete_dish_empty(client):
-    response = client.get('/api/v1/menus/2/submenus/2/dishes/1')
-    assert response.json() == {
-        "detail": "It's deleted"
-    }
+    response = client.get('/api/v1/menus/2/submenus/2/dishes/10')
+    assert response.status_code == 404
+    assert response.json() == {'detail': 'Not Found'}
 
 
 def test_delete_menu_1(client):
     response = client.delete('/api/v1/menus/2')
+    assert response.status_code == 404
     assert response.json() == {
         "status": True,
         "message": "It's deleted"

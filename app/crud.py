@@ -64,8 +64,7 @@ def get_submenus(menu_id: int, db: Session):
         Submenu.menu_id == menu_id).all()
     if submenus:
         return submenus
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                        detail=["List is empty"])
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
 
 def get_submenu(menu_id: int, submenu_id: int, db: Session):
@@ -200,8 +199,7 @@ def update_dish(menu_id: int, submenu_id: int, dish_id: int, dish: CreateUpdateD
 
 def delete_dish(menu_id: int, submenu_id: int, dish_id: int, db: Session):
     """Delete one dish"""
-    dish_for_delete = db.query(Dish).filter(Dish.id == dish_id).filter(
-        Dish.menu_id == menu_id).filter(Dish.submenu_id == submenu_id).first()
+    dish_for_delete = get_dish(menu_id, submenu_id, dish_id, db)
     if dish_for_delete is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     else:

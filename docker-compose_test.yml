@@ -9,17 +9,17 @@ services:
       - /var/lib/postgresql/data/
     env_file:
       - .env_test
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U test -d test"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready -U test -d test"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
 
   web_tests:
     build:
       context: .
       dockerfile: Dockerfile
-    command: sh -c "alembic upgrade head && pytest test_main.py"
+    command: sh -c "alembic upgrade head && pytest test_tests.py"
     restart: always
     env_file:
       - .env_test
@@ -28,5 +28,4 @@ services:
     volumes:
       - .:/app
     depends_on:
-      db_test:
-        condition: service_healthy
+      - db_test

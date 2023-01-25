@@ -15,13 +15,10 @@ class UpdateCreate(BaseModel):
     title: str
     description: str
 
-    class Config:
-        orm_mode = True
-
 
 class BaseDelete(BaseModel):
     status: bool = True
-    massage: str = "It's deleted"
+    message: str = "It's deleted"
 
     class Config:
         orm_mode = True
