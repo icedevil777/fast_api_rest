@@ -11,11 +11,10 @@ from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 from settings import settings
 
-app = FastAPI(title='Ylab Restaurant')
+app = FastAPI(title=settings.app_title)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.allowed_origins,
     allow_credentials=True,
     allow_headers=['*'],
     allow_methods=['*'],
