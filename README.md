@@ -11,7 +11,7 @@ docker-compose up --build
 
 #### Запустить тесты
 ```
-docker-compose -f docker-compose.tests.yml up --build
+docker-compose -f docker-compose-tests.yml up --build
 ```
 ***
 Основное приложение можно запускать с тестовым как вместе, так и отдельно. 

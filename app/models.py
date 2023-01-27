@@ -1,7 +1,6 @@
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy import *
-
-Base = declarative_base()
+from app.database import Base
 
 
 class Menu(Base):
@@ -65,5 +64,6 @@ class Dish(Base):
             self.price,
             self.menu_id
         )
+
 
 # Base.metadata.create_all(bind=engine)

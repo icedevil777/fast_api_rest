@@ -30,7 +30,7 @@ def get_db():
 
 
 @app.get("/")
-async def read_main():
+async def root():
     return {"msg": "Hello Ylab"}
 
 
