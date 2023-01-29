@@ -3,71 +3,66 @@ from pydantic import BaseModel
 
 
 class BaseMenu(BaseModel):
-    id: int
-    title: Optional[str]
-    description: Optional[str]
-
-    class Config:
-        orm_mode = True
-
-
-class UpdateCreate(BaseModel):
-    title: str
-    description: str
-
-
-class BaseDelete(BaseModel):
-    status: bool = True
-    message: str = "It's deleted"
+    id: Optional[str] = "menu_id (str)"
+    title: Optional[str] = "menu title (str)"
+    description: Optional[str] = "menu description (str)"
+    dishes_count: Optional[int] = 0
+    submenus_count: Optional[int] = 0
 
     class Config:
         orm_mode = True
 
 
 class BaseSubmenu(BaseModel):
-    id: int
-    menu_id: int
-    title: Optional[str]
-    description: Optional[str]
+    id: Optional[str] = "submenu_id (str)"
+    title: Optional[str] = "submenu title (str)"
+    description: Optional[str] = "submenu description (str)"
+    dishes_count: Optional[int] = 1
 
     class Config:
         orm_mode = True
 
 
 class BaseDish(BaseModel):
-    id: int
-    menu_id: int
-    submenu_id: int
-    title: Optional[str]
-    price: float
-    description: Optional[str]
+    id: Optional[str] = "dish_id (str)"
+    title: Optional[str] = "dish title (str)"
+    description: Optional[str] = "dish description (str)"
+    price: Optional[str] = "0.00 (str)"
 
     class Config:
         orm_mode = True
+
+
+class UpCrMeSub(BaseModel):
+    title: str = "title"
+    description: str = "description"
 
 
 class CreateUpdateDish(BaseModel):
-    title: Optional[str]
-    price: float
-    description: Optional[str]
+    title: Optional[str] = "dish title"
+    description: Optional[str] = "dish description"
+    price: Optional[str] = "0.00"
 
     class Config:
         orm_mode = True
 
 
-class PatchMenu(BaseMenu):
-    id: int
-    title: Optional[str]
-    description: Optional[str]
-    # dishes_count: Optional[int]
+class BaseDelete(BaseModel):
+    status: bool = True
+
+    class Config:
+        orm_mode = True
 
 
-class PatchSubmenu(BaseSubmenu):
-    title: Optional[str]
-    description: Optional[str]
+class DeleteMenu(BaseDelete):
+    message: str = "The menu has been deleted"
 
 
-class UpgradeDish(BaseDish):
-    title: str
-    description: str
-    price: float
+class DeleteSubmenu(BaseDelete):
+    message: str = "The submenu has been deleted"
+
+
+class DeleteDish(BaseDelete):
+    message: str = "The dish has been deleted"
+
+
