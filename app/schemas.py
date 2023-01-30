@@ -17,7 +17,7 @@ class BaseSubmenu(BaseModel):
     id: Optional[str] = "submenu_id (str)"
     title: Optional[str] = "submenu title (str)"
     description: Optional[str] = "submenu description (str)"
-    dishes_count: Optional[int] = 1
+    dishes_count: Optional[int] = 0
 
     class Config:
         orm_mode = True
@@ -27,7 +27,7 @@ class BaseDish(BaseModel):
     id: Optional[str] = "dish_id (str)"
     title: Optional[str] = "dish title (str)"
     description: Optional[str] = "dish description (str)"
-    price: Optional[str] = "0.00 (str)"
+    price: Optional[str] = "0.00"
 
     class Config:
         orm_mode = True

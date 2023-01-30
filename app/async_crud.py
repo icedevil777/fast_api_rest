@@ -3,9 +3,9 @@
 from typing import Type
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from schemas import UpCrMeSub, CreateUpdateDish, DeleteMenu, \
+from app.schemas import UpCrMeSub, CreateUpdateDish, DeleteMenu, \
 	DeleteSubmenu, DeleteDish, BaseSubmenu, BaseMenu, BaseDish
-from models import Menu, Submenu, Dish
+from app.models import Menu, Submenu, Dish
 from sqlalchemy import select
 
 

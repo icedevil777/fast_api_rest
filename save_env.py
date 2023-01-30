@@ -1,4 +1,5 @@
 import asyncio
+import os
 from logging.config import fileConfig
 
 from alembic import context
@@ -11,7 +12,8 @@ from models import *
 from settings import Settings
 
 config = context.config
-DATABASE_URL = 'postgresql+asyncpg://root:root@localhost:5432/root'
+# DATABASE_URL = "postgresql+asyncpg://root:root@localhost:5432/root"
+DATABASE_URL = os.getenv('DATABASE_URL', default='')
 config.set_main_option('sqlalchemy.url', DATABASE_URL)
 
 

@@ -2,13 +2,13 @@ from typing import Type
 import uvicorn
 from sqlalchemy.ext.asyncio import AsyncSession
 
-import async_crud
-from database import AsyncSessionLocal, SessionLocal, get_async_db
-from schemas import BaseMenu, BaseDish, BaseSubmenu, UpCrMeSub,\
+from app import async_crud
+from app.database import get_async_db
+from .schemas import BaseMenu, BaseDish, BaseSubmenu, UpCrMeSub,\
 	CreateUpdateDish, DeleteMenu, DeleteSubmenu, DeleteDish
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from settings import settings
+from app.settings import settings
 
 app = FastAPI(title=settings.app_title)
 

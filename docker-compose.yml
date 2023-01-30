@@ -5,8 +5,8 @@ services:
   db:
     image: postgres:15.1-alpine
     restart: always
-    volumes:
-      - /var/lib/postgresql/data/
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data/
     environment:
       POSTGRES_USER: ${PG_USER}
       POSTGRES_PASSWORD: ${PG_PASS}
@@ -14,7 +14,7 @@ services:
     ports:
       - "${PG_PORT}:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: [ "CMD-SHELL", "pg_isready" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -27,15 +27,14 @@ services:
       POSTGRES_PORT: ${PG_PORT}
       POSTGRES_DB: ${PG_DB}
       DRIVER: ${PG_DRIVER}
+      DATABASE_URL: postgresql+asyncpg://root:root@db:5432/root
     build:
       context: .
       dockerfile: Dockerfile
-    entrypoint: >
+    entrypoint:
       sh -c "
-        export DATABASE_URL=postgresql+asyncpg://root:root@db:5432/root &&
-        alembic upgrade head && 
-        uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload &&
-        pytest test_async.py    
+        alembic upgrade head &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
       "
     restart: always
     ports:
@@ -45,3 +44,5 @@ services:
     depends_on:
       db:
         condition: service_healthy
+#volumes:
+#  postgres_data:

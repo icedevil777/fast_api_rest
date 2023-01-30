@@ -1,22 +1,27 @@
 import asyncio
+import os
 from logging.config import fileConfig
 
 from alembic import context
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import AsyncEngine
+from app.models import *
 
-# from project.config import load_settings
-from app.models import Base
-from settings import Settings
 
 config = context.config
+# DATABASE_URL = "postgresql+asyncpg://root:root@localhost:5432/root"
+DATABASE_URL = os.getenv('DATABASE_URL', default='')
+config.set_main_option('sqlalchemy.url', DATABASE_URL)
+
+
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 target_metadata = Base.metadata
 
-settings = Settings()
+# settings = Settings()
+
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
@@ -27,9 +32,9 @@ def run_migrations_offline() -> None:
     Calls to context.execute() here emit the given string to the
     script output.
     """
-
+    url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=settings.database_url,
+        url=url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -47,6 +52,7 @@ def do_run_migrations(connection: Connection) -> None:
 
 
 async def run_async_migrations() -> None:
+    url = config.get_main_option("sqlalchemy.url")
 
     connectable = AsyncEngine(
         engine_from_config(
@@ -54,7 +60,7 @@ async def run_async_migrations() -> None:
             prefix="sqlalchemy.",
             poolclass=pool.NullPool,
             future=True,
-            url=settings.database_url,
+            url=url,
         )
     )
 
@@ -80,3 +86,5 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
+
+

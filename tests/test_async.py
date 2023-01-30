@@ -9,12 +9,12 @@ def event_loop():
 	return asyncio.get_event_loop()
 
 
-# @pytest.mark.asyncio
-# async def test_root():
-# 	async with AsyncClient(app=app, base_url="http://test") as ac:
-# 		response = await ac.get("/")
-# 	assert response.status_code == 200
-# 	assert response.json() == {"msg": "Hello Ylab"}
+@pytest.mark.asyncio
+async def test_root():
+	async with AsyncClient(app=app, base_url="http://test") as ac:
+		response = await ac.get("/")
+	assert response.status_code == 200
+	assert response.json() == {"msg": "Hello Ylab"}
 
 
 @pytest.mark.asyncio
@@ -251,7 +251,7 @@ async def test_patch_dish():
 			json={
 				"title": "My updated dish 1",
 				"description": "My updated dish description 1",
-				"price": 14.5
+				"price": "14.5"
 			}
 		)
 	assert response.json() == {
