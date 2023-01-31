@@ -55,8 +55,6 @@ class Menu(Base):
 	)
 	title: str = Column(String(128), nullable=False)
 	description: str = Column(String(256))
-	# submenus_count: int = Column(Integer, default=0)
-	# dishes_count: int = Column(Integer, default=0)
 	submenus = relationship(
 		"Submenu",
 		back_populates='menus',

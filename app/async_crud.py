@@ -33,7 +33,7 @@ async def get_menu(
 	"""
 	menu = await db.execute(select(Menu).where(Menu.id == menu_id))
 	menu = menu.scalars().first()
-	if not menu:
+	if menu is None:
 		raise HTTPException(
 			status_code=404,
 			detail='menu not found',
@@ -115,9 +115,9 @@ async def get_submenus(
 	:param db:
 	:return:
 	"""
-	menu = await get_menu(menu_id, db)
-	if not menu:
-		raise HTTPException(status_code=404)
+	# menu = await get_menu(menu_id, db)
+	# if not menu:
+	# 	raise HTTPException(status_code=404)
 	submenus = await db.execute(select(Submenu).where(
 		Submenu.menu_id == menu_id))
 	return submenus.scalars().all() if submenus else []
@@ -136,7 +136,7 @@ async def get_submenu(
 	:return:
 	"""
 	menu = await get_menu(menu_id, db)
-	if not menu:
+	if menu is None:
 		raise HTTPException(status_code=404)
 	submenu = await db.execute(select(
 		Submenu).where(
@@ -164,7 +164,7 @@ async def create_submenu(
 	:return:
 	"""
 	menu = await get_menu(menu_id, db)
-	if not menu:
+	if menu is None:
 		raise HTTPException(status_code=404)
 	new_submenu = Submenu(
 		title=sub.title,
@@ -196,7 +196,7 @@ async def update_submenu(
 		submenu_id=submenu_id,
 		db=db
 	)
-	if not submenu_to_update:
+	if submenu_to_update is None:
 		raise HTTPException(status_code=404)
 	submenu_to_update.title = submenu.title
 	submenu_to_update.description = submenu.description
@@ -242,15 +242,18 @@ async def get_dishes(
 	:param db: 
 	:return: 
 	"""""
-	menu = await get_menu(menu_id, db)
-	submenu = await get_submenu(menu_id, submenu_id, db)
-	if not menu:
-		raise HTTPException(status_code=404)
-	if not submenu:
-		raise HTTPException(
-			status_code=404,
-			detail='submenu not found'
-		)
+	# menu = await get_menu(menu_id, db)
+	# submenu = await get_submenu(menu_id, submenu_id, db)
+	# if menu is None:
+	# 	raise HTTPException(
+	# 		status_code=404,
+	# 		detail='menu not found'
+	# 	)
+	# if submenu is None:
+	# 	raise HTTPException(
+	# 		status_code=404,
+	# 		detail='submenu not found'
+	# 	)
 
 	dishes = await db.execute(select(Dish).where(
 		Dish.menu_id == menu_id).where(
@@ -278,14 +281,14 @@ async def get_dish(
 		submenu_id=submenu_id,
 		db=db,
 	)
-	if not menu or not submenu:
+	if menu is None or submenu is None:
 		raise HTTPException(status_code=404)
 	dish = await db.execute(select(Dish).where(
 		Dish.menu_id == menu_id).where(
 		Dish.submenu_id == submenu_id).where(
 		Dish.id == dish_id))
 	dish = dish.scalars().first()
-	if not dish:
+	if dish is None:
 		raise HTTPException(
 			status_code=404,
 			detail="dish not found",
@@ -309,7 +312,7 @@ async def create_dish(
 	"""
 	menu = await get_menu(menu_id, db)
 	submenu = await get_submenu(menu_id, submenu_id, db)
-	if not menu or not submenu:
+	if menu is None or submenu is None:
 		raise HTTPException(status_code=404)
 	print('dish.price', dish.price)
 	# try:
@@ -349,7 +352,7 @@ async def update_dish(
 	"""
 	menu = await get_menu(menu_id, db)
 	submenu = await get_submenu(menu_id, submenu_id, db)
-	if not menu or not submenu:
+	if menu is None or submenu is None:
 		raise HTTPException(status_code=404)
 	dish_for_update = await get_dish(
 		menu_id=menu_id,
@@ -357,9 +360,9 @@ async def update_dish(
 		dish_id=dish_id,
 		db=db,
 	)
-	if not dish_for_update:
+	if dish_for_update is None:
 		raise HTTPException(status_code=404)
-	price = round(float(dish.price), 2)
+	price = str(round(float(dish.price), 2))
 	dish_for_update.title = dish.title
 	dish_for_update.description = dish.description
 	dish_for_update.price = price
@@ -388,7 +391,7 @@ async def delete_dish(
 		dish_id=dish_id,
 		db=db,
 	)
-	if not dish_for_delete:
+	if dish_for_delete is None:
 		raise HTTPException(status_code=404)
 	await db.delete(dish_for_delete)
 	await db.commit()

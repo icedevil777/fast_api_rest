@@ -22,7 +22,6 @@ docker-compose -f docker-compose-tests.yml up --build
 docker-compose -f docker-compose-tests.yml down
 docker-compose -f docker-compose-tests.yml down --remove-orphans
 ```
-#### Если контейнеры не останавливаются добавить флаг --remove-orphans
 
 #### Доп команды для проекта:
 ```

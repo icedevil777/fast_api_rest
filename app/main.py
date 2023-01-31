@@ -33,7 +33,7 @@ async def root():
 	"/api/v1/menus",
 	response_model=list[BaseMenu],
 	summary='Get List of Menus',
-	description="Getting all list of menus",
+	description="Get List of Menus",
 	status_code=200
 )
 async def get_menus(
@@ -50,6 +50,8 @@ async def get_menus(
 @app.get(
 	"/api/v1/menus/{menu_id}",
 	response_model=BaseMenu,
+	summary='Get One Menu',
+	status_code=200,
 )
 async def get_menu(
 	menu_id: int,
@@ -67,6 +69,7 @@ async def get_menu(
 @app.post(
 	"/api/v1/menus",
 	response_model=BaseMenu,
+	summary='Create One Menu',
 	status_code=201
 )
 async def create_menu(
@@ -85,7 +88,8 @@ async def create_menu(
 @app.patch(
 	"/api/v1/menus/{menu_id}",
 	response_model=BaseMenu,
-	status_code=200
+	status_code=200,
+	summary='Update One Menu',
 )
 async def update_menu(
 	menu_id: int,
@@ -109,7 +113,8 @@ async def update_menu(
 @app.delete(
 	"/api/v1/menus/{menu_id}",
 	response_model=DeleteMenu,
-	status_code=200
+	status_code=200,
+	summary='Delete one Menu',
 )
 async def delete_menu(
 	menu_id: int,
@@ -128,6 +133,7 @@ async def delete_menu(
 	"/api/v1/menus/{menu_id}/submenus",
 	response_model=list[BaseSubmenu],
 	status_code=200,
+	summary='Get List of Submenus',
 )
 async def get_submenus(
 	menu_id: int,
@@ -148,7 +154,8 @@ async def get_submenus(
 @app.post(
 	"/api/v1/menus/{menu_id}/submenus",
 	response_model=BaseSubmenu,
-	status_code=201
+	status_code=201,
+	summary='Create One Submenu',
 )
 async def create_submenu(
 	menu_id: int,
@@ -172,7 +179,9 @@ async def create_submenu(
 @app.get(
 	"/api/v1/menus/{menu_id}/submenus/{submenu_id}",
 	response_model=BaseSubmenu,
-	status_code=200)
+	status_code=200,
+	summary='Get One Submenu',
+)
 async def get_submenu(
 	menu_id: int,
 	submenu_id: int,
@@ -196,6 +205,7 @@ async def get_submenu(
 	"/api/v1/menus/{menu_id}/submenus/{submenu_id}",
 	response_model=BaseSubmenu,
 	status_code=200,
+	summary='Update One Submenu',
 )
 async def update_submenu(
 	menu_id: int,
@@ -223,6 +233,7 @@ async def update_submenu(
 	"/api/v1/menus/{menu_id}/submenus/{submenu_id}",
 	response_model=DeleteSubmenu,
 	status_code=200,
+	summary='Delete One Submenu',
 )
 async def delete_submenu(
 	menu_id: int,
@@ -247,6 +258,7 @@ async def delete_submenu(
 	"/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes",
 	response_model=list[BaseDish],
 	status_code=200,
+	summary='Get List of Dishes',
 )
 async def get_dishes(
 	menu_id: int,
@@ -271,6 +283,7 @@ async def get_dishes(
 	"/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes",
 	response_model=BaseDish,
 	status_code=201,
+	summary='Create One Dish',
 )
 async def create_dish(
 	menu_id: int,
@@ -298,6 +311,7 @@ async def create_dish(
 	"/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}",
 	response_model=BaseDish,
 	status_code=200,
+	summary='Get One Dish',
 )
 async def get_dish(
 	menu_id: int,
@@ -325,6 +339,7 @@ async def get_dish(
 	"/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}",
 	response_model=BaseDish,
 	status_code=200,
+	summary='Update One Dish',
 )
 async def update_dish(
 	menu_id: int,
@@ -354,7 +369,8 @@ async def update_dish(
 @app.delete(
 	"/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}",
 	response_model=DeleteDish,
-	status_code=200
+	status_code=200,
+	summary='Delete One Dish',
 )
 async def delete_dish(
 	menu_id: int,
